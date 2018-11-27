@@ -11,7 +11,7 @@ void SET_EPWM_INIT(void);
 *输入参数:per占空比(0~255)
 *返回参数:无
 ====================================================*/
-void SET_EPWM_TO(unsigned char per);
+void SET_EPWM_TO(unsigned int per);
 /*====================================================
 *函数名:SET_EPWM_OFF
 *功能:停止PWM输出

@@ -20,12 +20,23 @@ volatile unsigned char Temp_Read;
 
 void key_init(void)
 {
+	TRISA2 = 0;	
+    RA2=0;
 	//PORTA |= PA_KEY_MASK;
 	TRISA |= PA_KEY_MASK;  
 	WPUA |= PA_KEY_MASK;   
 	//PORTC |= PC_KEY_MASK;
 	TRISC |= PC_KEY_MASK; 
 	WPUC |= PC_KEY_MASK;    	
+}
+
+void test_init(void)
+{
+	TRISA2 = 0;	
+    RA2=0;
+    TRISA3 = 1;	
+    WPUA3 = 1;
+    RA3=1;   	
 }
 
 void key_scan(void)
@@ -40,14 +51,19 @@ void key_scan(void)
 
 void key_scan_H(void)
 {
-	if(key_power){ if(key_power_time<250)	key_power_time++;}
+	if(key_power){ if(key_power_time<250)	key_power_time++;}			//高位需要休眠
 	else key_power_time=0;
-	if(key_stop) {if(key_stop_time<250)		key_stop_time++;}
+	if(key_stop) {if(key_stop_time<250)		key_stop_time++;}		//高位需要停止
 	else key_stop_time=0;
-	if(key_speed){if(key_speed_time<250)	key_speed_time++;}
-	else key_speed_time=0;
+	//if(key_speed){if(key_speed_time<250)	key_speed_time++;}
+	//else key_speed_time=0;
 }
 
+void get_speedmode(void)
+{
+	
+	
+}
 /*
  goto_sleep(void)
  只能被RA6的ioca中断唤醒
@@ -98,13 +114,31 @@ unsigned int filter(int *arr)
 {
   unsigned char i=0;
   unsigned int sum=0;
-  for(i=0;i<(N-2);i++){
-    if(*(arr+i)>MAX_VALUE) *(arr+i)=1000;
-    if(*(arr+i)<MIN_VALUE) *(arr+i)=0;
+  for(i=0;i<(N-0);i++){
+    //if(*(arr+i)>gyro[speed_mode][2]) *(arr+i)=1000;
+    //else if(*(arr+i)<gyro[speed_mode][0]) *(arr+i)=0;
+   // else *(arr+i)-=gyro[speed_mode][0];
     sum+=*(arr+i);
   }
   sum=sum>>3;
-  sum+=MIN_VALUE;
+  //sum+=gyro[speed_mode][0];
+  //*(arr+N-1)=sum;
+  return sum;
+}
+/*
+unsigned int filter(int *arr)
+{
+  unsigned char i=0;
+  unsigned int sum=0;
+  for(i=0;i<(N-2);i++){
+    if(*(arr+i)>gyro[speed_mode][2]) *(arr+i)=1000;
+    else if(*(arr+i)<gyro[speed_mode][0]) *(arr+i)=0;
+    else *(arr+i)-=gyro[speed_mode][0];
+    sum+=*(arr+i);
+  }
+  sum=sum>>3;
+  sum+=gyro[speed_mode][0];
   *(arr+N-1)=sum;
   return *(arr+N-1);
 }
+*/

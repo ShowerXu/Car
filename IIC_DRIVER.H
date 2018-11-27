@@ -16,7 +16,7 @@
 #define SET_SDA_OUT		TRISC4 = 0
 #define SET_SDA_IN		TRISC4 = 1
 
-#define I2C_SPEED		2
+#define I2C_SPEED		5
 
 //IIC操作函数
 void IIC_Init(void);//初始化IIC的IO�?

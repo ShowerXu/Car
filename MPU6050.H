@@ -72,6 +72,7 @@
 //当 MPU_AD0 悬空/接 GND 的时候，模块的 IIC 从机地址为： 0X68；
 //当 MPU_AD0 接 VCC的时候，模块的 IIC 从机地址为： 0X69
 #define MPU_ADDR				0X68
+#define MPU_ID				0X2E
 
 u8 MPU_Init(void); 								//初始化MPU6050
 u8 MPU_Set_Gyro_Fsr(u8 fsr);//设置MPU6050陀螺仪传感器满量程范围

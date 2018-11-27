@@ -6,31 +6,34 @@
 #include "MS82Fxx02.h"
 //****************************************
 #include "mpu6050.h"   
-
+u8 res1;
 //初始化MPU6050
 //返回值: 0,成功
 //        其他,错误代码
 u8 MPU_Init(void)
 {
-	u8 res;
+	
 	IIC_Init();//初始化IIC总线
 	MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X80);//复位MPU6050
-	__delay_ms(100);
+	__delay_ms(50);   
 	MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X00);//唤醒MPU6050
-	MPU_Set_Gyro_Fsr(3); //陀螺仪传感器,±2000dps
+    __delay_ms(50); 
+	MPU_Set_Gyro_Fsr(3); //陀螺仪传感器,±2000dps //灵敏度65536/4000=16.4LSB/(°/S)
 	MPU_Set_Accel_Fsr(0); //加速度传感器 ±2g
 	MPU_Set_Rate(200); //设置采样率50HZ
 	MPU_Write_Byte(MPU_INT_EN_REG,0X00); //关闭所有中断
 	MPU_Write_Byte(MPU_USER_CTRL_REG,0X00);//I2C主模式关闭
 	MPU_Write_Byte(MPU_FIFO_EN_REG,0X00);//关闭FIFO
 	MPU_Write_Byte(MPU_INTBP_CFG_REG,0X80);//INT引脚低电平有效
-	res=MPU_Read_Byte(MPU_DEVICE_ID_REG);
-	if(res==MPU_ADDR)//器件ID正确
+    
+	res1=MPU_Read_Byte(MPU_DEVICE_ID_REG);
+	if((res1==MPU_ID)||(res1==MPU_ADDR))//器件ID正确
 	{
-		MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X02);//设置CLKSEL,PLL X 轴为参考
-		MPU_Write_Byte(MPU_PWR_MGMT2_REG,0X00);//加速度陀螺仪都工作
+		MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X03);//设置CLKSEL,PLL Z 轴为参考
+		MPU_Write_Byte(MPU_PWR_MGMT2_REG,0X38);//加速度不工作
 		MPU_Set_Rate(200); //设置采样率为50HZ
-	}else return 1;
+	}
+    else return 1;
 	return 0;
 }
 

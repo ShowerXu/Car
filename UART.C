@@ -115,7 +115,7 @@ void int2str(unsigned char *s,int temp_data)
 	temp_data=-temp_data;
     *s='-';
 	}
-	else *s=' ';
+	else *s='+';
     if(temp_data>10000){
 	    *++s =temp_data/10000+0x30;
 	    temp_data=temp_data%10000;     //???à????
@@ -135,3 +135,33 @@ void int2str(unsigned char *s,int temp_data)
     *++s =temp_data+0x30;
     *++s=0; 	
 }
+
+void int2StrB(unsigned char *str,int nb)
+{
+    unsigned char len,nindex=0;
+    int tmpNb;
+    str[6]='\0';
+    if(nb<0){
+        str[0]='-';
+        nb=-nb;     //转换为正数
+        nindex=1;
+    }else if(0==nb){
+        str[0]='0';
+        str[1]='\0';
+        return;
+    }
+    len=0; //记录nb的位数
+    tmpNb=nb;
+    while(0!=tmpNb){
+        ++len;
+        tmpNb/=10;
+    }
+    if(nindex==0)--len; //在str中定位最后一位数字应该在的位置
+    str[len+1]='\0';    //设置结束符号
+    while(0!=nb){
+        str[len--]=nb%10+'0';
+        nb/=10;
+    }
+    return;
+}
+

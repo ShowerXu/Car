@@ -15,7 +15,7 @@ void SET_EPWM_INIT(void)
 {
 	TRISC |= 0b00001000;
 	MSCKCON |= 0b00100000;
-	PR2 = 63;
+	PR2 = 255;
 	EPWMR1L = 0;
 	EPWM1CON = 0b10001100; //PWM模式,半桥输出
 	TMR2IF = 0;
@@ -52,11 +52,11 @@ void SET_EPWM_INIT(void)
 *输入参数:per占空比(0~255)
 *返回参数:无
 ====================================================*/
-void SET_EPWM_TO(unsigned char per)
+void SET_EPWM_TO(unsigned int per)
 {
 
 	EPWMR1L = per>>2;
-	EPWM1CON = 0b10001100|((per&0b00000011)<<4);
+	EPWM1CON = 0b10001100|((per&0b000000000011)<<4);
 
 }
 
@@ -83,5 +83,4 @@ void SET_EPWM_ON(void)
 {
 
 	EPWMAS &= 0x00;
-
 }
